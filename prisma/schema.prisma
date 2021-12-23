@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Segment {
+  id            String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  name          String
+  runSegments   RunSegment[]
+}
+
+model Run {
+  id            String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  runSegments   RunSegment[]
+}
+
+model RunSegment {
+  id            String        @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  run           Run           @relation(fields: [runId], references: [id])
+  runId         String        @db.ObjectId
+  segment       Segment       @relation(fields: [segmentId], references: [id])
+  segmentId     String        @db.ObjectId
+  isCompleted   Boolean
+}
