@@ -1,5 +1,5 @@
 import { Segment } from "@prisma/client";
-import { LoaderFunction, redirect, useLoaderData } from "remix";
+import { LoaderFunction, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import { SegmentItem } from "~/components/SegmentItem";
 

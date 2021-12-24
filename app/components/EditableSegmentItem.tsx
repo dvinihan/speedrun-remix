@@ -1,5 +1,6 @@
 import { Segment } from "@prisma/client";
 import ReactModal from "react-modal";
+import { Form } from "remix";
 import { useToggle } from "~/hooks/useToggle";
 
 type Props = {
@@ -15,22 +16,20 @@ export function EditableSegmentItem({ segment }: Props) {
     <div>
       <input name="id" value={id} hidden readOnly />
       <input defaultValue={name} name="name" />
-      <button type="button" onClick={toggleDeleteModal}>
+      <button onClick={toggleDeleteModal} type="button">
         Delete
       </button>
-      <ReactModal isOpen={showDeleteModal} onAfterClose={toggleDeleteModal}>
-        <div>
-          Are you sure you want to delete the &quot;{name}&quot; segment?
-          <button
-            onClick={toggleDeleteModal}
-            formAction={`/editSegments/delete?id=${id}`}
-            formMethod="post"
-            type="submit"
-          >
-            Yes
+
+      {/* the modal renders outside of the editSegments Form, so we should use a new Form here */}
+      <ReactModal ariaHideApp={false} isOpen={showDeleteModal}>
+        Are you sure you want to delete the &quot;{name}&quot; segment?
+        <Form action={`/editSegments/delete`} method="post">
+          <input name="id" value={id} hidden readOnly />
+          <button type="submit">Yes</button>
+          <button onClick={toggleDeleteModal} type="button">
+            No!!
           </button>
-          <button onClick={toggleDeleteModal}>No!!</button>
-        </div>
+        </Form>
       </ReactModal>
     </div>
   );

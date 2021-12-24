@@ -1,13 +1,11 @@
 import { Segment } from "@prisma/client";
-import { useActionData } from "remix";
 
 type Props = {
-  segment?: Segment;
+  segment: Segment;
 };
 
 export function SegmentItem({ segment }: Props) {
-  const updatedSegment = useActionData<Segment>();
-  const { name, id } = updatedSegment ?? segment ?? {};
+  const { name, id } = segment;
 
   return (
     <div

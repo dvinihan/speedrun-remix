@@ -36,7 +36,9 @@ export default function EditSegments() {
           <div key={index}>
             <input name="index" value={index} hidden readOnly />
             <input name="newName" />
-            <button onClick={() => removeNewSegment(index)}>Discard</button>
+            <button onClick={() => removeNewSegment(index)} type="button">
+              Discard
+            </button>
           </div>
         ))}
         <button onClick={addNewSegment} type="button">
