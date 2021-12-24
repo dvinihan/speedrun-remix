@@ -4,7 +4,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
 
@@ -22,6 +22,23 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <h1>SMO Speedrun Timer</h1>
+        <select
+        // defaultValue={runType}
+        // disabled={isRunning}
+        // onChange={handleRunTypeSelect}
+        >
+          <option
+          // value={RunType.WORLD_PEACE}
+          >
+            World Peace
+          </option>
+          <option
+          // value={RunType.ANY_PERCENT}
+          >
+            Any%
+          </option>
+        </select>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
