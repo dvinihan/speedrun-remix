@@ -7,12 +7,42 @@ import {
   ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
+import { RunType } from "./types/RunType";
+import { useState } from "react";
+import { RunSegment } from "@prisma/client";
+
+export type OutletContextTypes = {
+  isRunning: boolean;
+  setIsRunning: (isRunning: boolean) => void;
+  showEditSegments: boolean;
+  setShowEditSegments: (showEditSegments: boolean) => void;
+  runningTime: number;
+  setRunningTime: (time: number) => void;
+  startedAtTime: number;
+  setStartedAtTime: (time: number) => void;
+  runType: RunType;
+  setRunType: (runType: RunType) => void;
+  currentRunSegments: RunSegment[];
+  setCurrentRunSegments: (
+    segments:
+      | RunSegment[]
+      | ((currentRunSegments: RunSegment[]) => RunSegment[])
+  ) => void;
+};
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Speedrun" };
 };
 
 export default function App() {
+  const [isRunning, setIsRunning] = useState(false);
+  const [runningTime, setRunningTime] = useState(0);
+  const [startedAtTime, setStartedAtTime] = useState(0);
+  const [runType, setRunType] = useState(RunType.ANY_PERCENT);
+  const [currentRunSegments, setCurrentRunSegments] = useState<RunSegment[]>(
+    []
+  );
+
   return (
     <html lang="en">
       <head>
@@ -28,18 +58,23 @@ export default function App() {
         // disabled={isRunning}
         // onChange={handleRunTypeSelect}
         >
-          <option
-          // value={RunType.WORLD_PEACE}
-          >
-            World Peace
-          </option>
-          <option
-          // value={RunType.ANY_PERCENT}
-          >
-            Any%
-          </option>
+          <option value={RunType.WORLD_PEACE}>World Peace</option>
+          <option value={RunType.ANY_PERCENT}>Any%</option>
         </select>
-        <Outlet />
+        <Outlet
+          context={{
+            isRunning,
+            setIsRunning,
+            runningTime,
+            setRunningTime,
+            startedAtTime,
+            setStartedAtTime,
+            runType,
+            setRunType,
+            currentRunSegments,
+            setCurrentRunSegments,
+          }}
+        />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}

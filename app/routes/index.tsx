@@ -1,15 +1,29 @@
-import { Segment } from "@prisma/client";
-import { LoaderFunction, useLoaderData } from "remix";
+import { RunSegment, Segment } from "@prisma/client";
+import { LoaderFunction, useLoaderData, useOutletContext } from "remix";
 import { db } from "~/utils/db.server";
 import { SegmentItem } from "~/components/SegmentItem";
+import { useEffect } from "react";
+import { OutletContextTypes } from "~/root";
+
+type LoaderData = {
+  segments: Segment[];
+  runSegments: RunSegment[];
+};
 
 export const loader: LoaderFunction = async () => {
   const segments = await db.segment.findMany();
-  return segments;
+  const runSegments = await db.runSegment.findMany();
+
+  return { segments, runSegments } as LoaderData;
 };
 
 export default function Index() {
-  const segments = useLoaderData<Segment[]>();
+  const { segments, runSegments } = useLoaderData<LoaderData>();
+  const { setCurrentRunSegments } = useOutletContext<OutletContextTypes>();
+
+  useEffect(() => {
+    setCurrentRunSegments(runSegments);
+  }, [runSegments]);
 
   return (
     <div>
